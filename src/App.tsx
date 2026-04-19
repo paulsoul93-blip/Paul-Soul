@@ -239,13 +239,26 @@ const Navbar = () => {
     { name: 'Solutions', href: '#solutions' },
     { name: 'Features', href: '#features' },
     { name: 'Process', href: '#process' },
-    { name: 'Pricing', href: '#pricing' },
+    { name: 'About', href: '#about' },
   ];
+
+  const handleLinkClick = (e: any, href: string) => {
+    e.preventDefault();
+    setIsMobileMenuOpen(false);
+    const element = document.querySelector(href);
+    if (element) {
+      const offsetTop = element.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({
+        top: offsetTop,
+        behavior: 'smooth'
+      });
+    }
+  };
 
   return (
     <nav className={`fixed top-0 w-full z-50 transition-all duration-500 ${isScrolled ? 'glass py-3' : 'bg-transparent py-8'}`}>
       <div className="max-w-7xl mx-auto px-10 flex items-center justify-between">
-        <div className="flex items-center gap-4 cursor-pointer group">
+        <div className="flex items-center gap-4 cursor-pointer group" onClick={(e) => handleLinkClick(e as any, '#hero')}>
           <LogoMark />
           <span className="font-display font-black tracking-tighter text-brand-navy flex flex-col items-start leading-[0.8] ml-1">
             <span className="text-2xl md:text-3xl tracking-tight text-brand-navy">CAMBRIDGE<span className="text-brand-blue">AI</span></span>
@@ -259,49 +272,65 @@ const Navbar = () => {
             <a 
               key={link.name} 
               href={link.href} 
+              onClick={(e) => handleLinkClick(e, link.href)}
               className="text-[11px] font-bold uppercase tracking-[0.2em] text-brand-navy hover:text-brand-blue transition-colors"
             >
               {link.name}
             </a>
           ))}
-          <button className="bg-brand-navy text-white px-8 py-3 rounded-sm text-[11px] font-bold uppercase tracking-widest hover:bg-brand-blue transition-all border border-brand-navy static-glow">
+          <button onClick={(e) => handleLinkClick(e as any, '#solutions')} className="bg-brand-navy text-white px-8 py-3 rounded-sm text-[11px] font-bold uppercase tracking-widest hover:bg-brand-blue transition-all border border-brand-navy static-glow">
             Contact
           </button>
         </div>
 
         {/* Mobile Menu Toggle */}
         <button 
-          className="md:hidden text-brand-navy"
+          className="md:hidden text-brand-navy p-2 bg-white/50 backdrop-blur-md rounded-full shadow-sm border border-brand-navy/5"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         >
-          {isMobileMenuOpen ? <X /> : <Menu />}
+          {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden absolute top-full left-0 w-full bg-white border-t border-gray-100 p-6 shadow-xl"
-        >
-          <div className="flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <a 
-                key={link.name} 
-                href={link.href} 
-                className="text-lg font-medium text-brand-navy"
-                onClick={() => setIsMobileMenuOpen(false)}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="md:hidden absolute top-full left-0 w-full overflow-hidden bg-white/95 backdrop-blur-3xl border-t border-brand-navy/5 shadow-2xl origin-top"
+          >
+            <div className="flex flex-col gap-6 p-8">
+              {navLinks.map((link, i) => (
+                <motion.a 
+                  key={link.name} 
+                  href={link.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  transition={{ delay: i * 0.05, duration: 0.3 }}
+                  className="text-2xl font-display font-black text-brand-navy tracking-tight"
+                  onClick={(e) => handleLinkClick(e, link.href)}
+                >
+                  {link.name}
+                </motion.a>
+              ))}
+              <motion.button 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                transition={{ delay: 0.2 }}
+                onClick={(e) => handleLinkClick(e as any, '#solutions')}
+                className="bg-brand-navy text-white px-6 py-4 rounded-2xl text-center font-bold text-sm tracking-widest uppercase mt-4 shadow-lg active:scale-95 transition-transform"
               >
-                {link.name}
-              </a>
-            ))}
-            <button className="bg-brand-navy text-white px-6 py-3 rounded-xl text-center font-semibold">
-              Get Started
-            </button>
-          </div>
-        </motion.div>
-      )}
+                Get Started
+              </motion.button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
@@ -310,29 +339,30 @@ const Hero = () => {
   return (
     <section id="hero" className="relative pt-40 pb-20 md:pt-64 md:pb-40 overflow-hidden">
       
-      <div className="max-w-7xl mx-auto px-10">
+      <div className="max-w-6xl mx-auto px-10">
         <div className="grid lg:grid-cols-[1.1fr_1fr] gap-20 items-center">
           <motion.div
             initial={{ opacity: 0, y: 30, filter: 'blur(20px)' }}
             animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           >
-            <div className="flex items-center gap-4 mb-8">
+            <div className="flex items-center gap-4 mb-4">
               <div className="h-[2px] w-12 bg-brand-cyan" />
               <span className="text-brand-navy font-black uppercase text-[10px] tracking-[0.5em] block">
                 The Next Evolution
               </span>
             </div>
-            <h1 className="font-display text-6xl md:text-[min(9vw,110px)] font-black leading-[0.85] text-brand-navy mb-8 tracking-tighter">
+            <h1 className="font-display text-5xl md:text-[80px] font-black leading-[0.9] text-brand-navy mb-6 tracking-tighter">
               Never Miss <br />
-              <span className="text-gradient-premium">a Call Again.</span>
+              <span className="text-gradient-premium">a Call.</span><br />
+              Never Lose a Lead.
             </h1>
-            <p className="text-xl md:text-2xl text-brand-navy/60 mb-12 max-w-lg leading-[1.4] font-medium tracking-tight">
-              Elite AI Receptionists for Cambridge firms. Scale your front desk with biological-quality voice and 24/7 autonomous intelligence.
+            <p className="text-xl md:text-xl text-brand-navy/60 mb-10 max-w-lg leading-[1.6] font-medium tracking-tight">
+              Custom AI Receptionists for Cambridge businesses. 24/7 availability. Fully built, tested, and ready to work.
             </p>
             <div className="flex flex-col sm:flex-row gap-6">
-              <button className="relative bg-brand-navy text-white px-10 py-5 rounded-[20px] font-bold text-sm tracking-widest uppercase hover:scale-105 transition-all duration-300 shadow-[0_20px_40px_rgba(0,31,63,0.15)] focus:outline-none radiant-glow-btn">
-                Experience Demo
+              <button className="relative bg-brand-navy text-white px-10 py-4 rounded-xl font-bold text-xs tracking-widest uppercase hover:scale-105 transition-all duration-300 shadow-[0_20px_40px_rgba(0,31,63,0.15)] focus:outline-none radiant-glow-btn">
+                Book Your Free Demo
               </button>
               <div className="flex items-center gap-4 group cursor-pointer">
                  <div className="w-14 h-14 rounded-full border border-brand-navy/10 flex items-center justify-center transition-all duration-500 group-hover:bg-brand-cyan group-hover:border-brand-cyan static-glow bg-white relative z-10">
@@ -564,25 +594,24 @@ const Chatbot = () => {
 
 const Features = () => {
   const feats = [
-    { title: "Smart Booking", desc: "Calendar API hooks.", size: "col-span-1 md:col-span-2 row-span-2", bg: "bg-white", icon: <CheckCircle2 className="w-8 h-8 text-brand-cyan" /> },
-    { title: "Language NLP", desc: "42+ Dialects.", size: "col-span-1 row-span-1", bg: "bg-brand-navy", icon: <Globe className="w-6 h-6 text-white" /> },
-    { title: "Alerts", desc: "Emergency detection.", size: "col-span-1 row-span-1", bg: "glass", icon: <Zap className="w-6 h-6 text-brand-blue" /> },
-    { title: "Memory", desc: "Contextual recall.", size: "col-span-1 row-span-1", bg: "bg-brand-gray", icon: <Activity className="w-6 h-6 text-brand-navy" /> },
-    { title: "Lead Qual", desc: "Smart filtering.", size: "col-span-1 md:col-span-2 row-span-1", bg: "bg-brand-cyan", icon: <Star className="w-6 h-6 text-brand-navy" /> }
+    { title: "Smart Booking", desc: "Schedules new appointments directly into your calendar.", size: "col-span-1 md:col-span-2 row-span-2", bg: "bg-white", icon: <CheckCircle2 className="w-8 h-8 text-brand-cyan" /> },
+    { title: "Easy Modifications", desc: "Reschedules or cancels existing bookings effortlessly.", size: "col-span-1 row-span-1", bg: "bg-brand-navy", icon: <Activity className="w-6 h-6 text-white" /> },
+    { title: "Instant Answers", desc: "Answers your FAQs and business inquiries perfectly.", size: "col-span-1 row-span-1", bg: "glass", icon: <Zap className="w-6 h-6 text-brand-blue" /> },
+    { title: "24/7 Autonomy", desc: "Always available, never sleeps, fully reliable.", size: "col-span-1 md:col-span-2 row-span-1", bg: "bg-brand-gray", icon: <Globe className="w-6 h-6 text-brand-navy" /> }
   ];
 
   return (
-    <section id="features" className="py-40 relative overflow-hidden text-brand-navy">
-      <div className="max-w-7xl mx-auto px-10 relative z-20">
-        <div className="mb-20 grid lg:grid-cols-2 gap-10 items-end">
+    <section id="features" className="py-24 relative overflow-hidden text-brand-navy">
+      <div className="max-w-6xl mx-auto px-10 relative z-20">
+        <div className="mb-16 grid lg:grid-cols-2 gap-10 items-end">
           <div>
-            <span className="text-brand-navy/40 font-bold uppercase text-[10px] tracking-[0.5em]">Capabilities Matrix</span>
-            <h2 className="font-display text-5xl md:text-[80px] leading-[0.9] font-black mt-6 tracking-tighter">
-              Biological <br /><span className="text-gradient-premium">Intelligence.</span>
+            <span className="text-brand-navy/40 font-bold uppercase text-[10px] tracking-[0.5em]">Exactly What Your AI Does</span>
+            <h2 className="font-display text-4xl md:text-5xl leading-[0.9] font-black mt-4 tracking-tighter">
+              It handles the entire call, start to finish.
             </h2>
           </div>
-          <p className="text-xl md:text-2xl text-brand-navy/60 font-medium leading-relaxed max-w-md">
-            Not just answering calls. Processing context, understanding sentiment, and executing business logic instantly.
+          <p className="text-lg text-brand-navy/60 font-medium leading-relaxed max-w-md">
+             So you don't have to.
           </p>
         </div>
 
@@ -622,47 +651,45 @@ const Features = () => {
 
 const ProblemSolution = () => {
   return (
-    <section id="solutions" className="py-40 relative overflow-hidden text-white backdrop-blur-2xl bg-brand-navy/95 border-y border-brand-navy/10">
+    <section id="solutions" className="py-24 relative overflow-hidden text-white backdrop-blur-2xl bg-brand-navy/95 border-y border-brand-navy/10">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,102,255,0.1),transparent_70%)] pointer-events-none" />
       
-      <div className="max-w-7xl mx-auto px-10 relative z-10">
-        <div className="text-center mb-24 max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto px-10 relative z-10">
+        <div className="text-center mb-16 max-w-4xl mx-auto">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <span className="text-brand-cyan font-black uppercase text-[10px] tracking-[0.4em] mb-4 block">The Smart Alternative</span>
-            <h2 className="font-display text-5xl md:text-7xl font-black text-gradient-dark leading-[0.95] tracking-tighter">
-              Stop bleeding revenue.<br />Meet your new front desk.
+            <h2 className="font-display text-4xl md:text-5xl font-black text-gradient-dark leading-[0.95] tracking-tighter">
+              The High Cost of Missed Calls
             </h2>
+            <p className="text-lg md:text-xl text-white/50 mt-4 max-w-2xl mx-auto">
+              A missed call is lost revenue. Hiring a human receptionist costs £25,000+ a year, and they can only handle one call at a time.
+            </p>
           </motion.div>
         </div>
 
         {/* High-End Comparison Dashboard */}
-        <div className="grid lg:grid-cols-2 gap-8 md:gap-10">
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-10 mt-12 bg-white/5 p-2 rounded-[40px] border border-white/10 shadow-2xl">
            {/* Human / Old Way */}
            <motion.div 
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="glass-dark p-10 md:p-14 rounded-[40px] flex flex-col justify-between opacity-80"
+              className="glass-dark p-10 md:p-14 rounded-[32px] flex flex-col justify-center opacity-70"
            >
               <div>
-                <h3 className="font-display font-black text-3xl mb-12 text-white/40 uppercase tracking-tighter">Human Output</h3>
-                <div className="space-y-8 border-l-2 border-white/5 pl-8">
+                <h3 className="font-display font-black text-2xl mb-8 text-white/40 uppercase tracking-tighter">Human Output</h3>
+                <div className="space-y-6 border-l-2 border-white/5 pl-8">
                    <div>
-                     <div className="text-3xl font-black text-white/50 tracking-tight">1</div>
-                     <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mt-2">Concurrent Caller Limit</div>
+                     <div className="text-2xl font-black text-white/50 tracking-tight">1</div>
+                     <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mt-1">Simultaneous Call Limit</div>
                    </div>
                    <div>
-                     <div className="text-3xl font-black text-white/50 tracking-tight">40 hrs</div>
-                     <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mt-2">Active Time per Week</div>
-                   </div>
-                   <div>
-                     <div className="text-3xl font-black text-white/50 tracking-tight">£2,200+</div>
-                     <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mt-2">Monthly Expenditure</div>
+                     <div className="text-2xl font-black text-white/50 tracking-tight">£25,000+</div>
+                     <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30 mt-1">Cost Per Year</div>
                    </div>
                 </div>
               </div>
@@ -673,37 +700,14 @@ const ProblemSolution = () => {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="glass p-10 md:p-14 rounded-[40px] shadow-[0_0_100px_rgba(0,212,255,0.15)] flex flex-col justify-between border-brand-cyan/20 relative overflow-hidden"
+              className="glass p-10 md:p-14 rounded-[32px] shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_0_100px_rgba(0,212,255,0.1)] flex flex-col justify-center border border-white/60 relative overflow-hidden"
            >
               <div className="absolute -top-32 -right-32 w-64 h-64 bg-brand-cyan/20 blur-[80px] rounded-full point-events-none" />
-              <div className="absolute -bottom-32 -left-32 w-64 h-64 bg-brand-blue/20 blur-[80px] rounded-full point-events-none" />
-              
               <div className="relative z-10">
-                <h3 className="font-display font-black text-5xl mb-12 text-brand-navy uppercase tracking-tighter flex items-center gap-4">
-                  Cambridge AI <Shield className="w-8 h-8 text-brand-blue" strokeWidth={3} />
+                <span className="text-brand-cyan font-black uppercase text-[10px] tracking-[0.4em] mb-4 block">The Smart Alternative</span>
+                <h3 className="font-display font-black text-3xl mb-8 text-brand-navy tracking-tight leading-tight">
+                  Your custom AI picks up instantly, handles unlimited simultaneous calls, and saves you up to 85% in staff costs.
                 </h3>
-                <div className="space-y-8 border-l-4 border-brand-cyan pl-8">
-                   <div>
-                     <div className="text-5xl font-black text-brand-navy tracking-tighter flex items-center gap-3">
-                        <InfinityIcon className="w-10 h-10 text-brand-cyan" />
-                     </div>
-                     <div className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-navy/50 mt-2">Simultaneous Callers</div>
-                   </div>
-                   <div>
-                     <div className="text-5xl font-black text-brand-navy tracking-tighter">168 hrs</div>
-                     <div className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-cyan mt-2">100% Weekly Uptime (24/7)</div>
-                   </div>
-                   <div>
-                     <div className="text-5xl font-black text-brand-navy tracking-tighter">£120</div>
-                     <div className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-navy/50 mt-2">Monthly Subscription starting from</div>
-                   </div>
-                </div>
-              </div>
-              <div className="relative z-10 mt-12 pt-8 border-t border-brand-navy/10 flex items-center gap-3">
-                 <div className="w-8 h-8 bg-brand-navy rounded-full flex items-center justify-center text-white">
-                    <Check className="w-4 h-4" strokeWidth={3} />
-                 </div>
-                 <span className="font-bold text-sm tracking-tight text-brand-navy uppercase">Pays for itself immediately</span>
               </div>
            </motion.div>
         </div>
@@ -853,34 +857,41 @@ const Pricing = () => {
 
 const About = () => {
   return (
-    <section className="py-24 relative overflow-hidden bg-brand-gray/20 backdrop-blur-2xl border-y border-brand-navy/5">
-      <div className="max-w-7xl mx-auto px-10">
-        <div className="grid md:grid-cols-[1fr_1.5fr] gap-20 items-center">
+    <section id="about" className="py-24 relative overflow-hidden bg-brand-gray/20 backdrop-blur-2xl border-y border-brand-navy/5">
+      <div className="max-w-6xl mx-auto px-10">
+        <div className="grid md:grid-cols-[1fr_1.5fr] gap-16 items-start">
           <div className="relative">
              <img 
-               src="https://picsum.photos/seed/office/800/1000" 
+               src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800" 
                alt="Pawel Dusza" 
-               className="w-full grayscale contrast-125"
+               className="w-full rounded-2xl shadow-xl hover:scale-[1.02] transition-transform duration-500"
              />
-             <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-brand-navy flex items-center justify-center p-6">
-                <span className="text-brand-gold text-xs font-black uppercase tracking-tighter text-center leading-tight">Elite Cambridge Service</span>
-             </div>
           </div>
-          <div className="space-y-8">
-            <span className="text-brand-gold font-bold uppercase text-[10px] tracking-widest">About The Founder</span>
-            <h2 className="font-display text-4xl md:text-5xl font-black text-brand-navy tracking-tighter">Locally Built. <br />Locally Supported.</h2>
-            <div className="text-brand-navy space-y-4">
-              <p className="font-bold underline decoration-brand-cyan underline-offset-8">Cambridge AI Receptionist is founded and managed locally.</p>
-              <p className="text-brand-navy/70 leading-relaxed font-medium">
-                No faceless corporations, no outsourced support. Just dedicated local expertise helping UK businesses thrive.
+          <div className="space-y-6">
+            <span className="inline-block bg-brand-blue text-white font-bold uppercase text-[10px] tracking-widest px-4 py-1.5 rounded-full">Founder & Builder</span>
+            <h2 className="font-display text-5xl font-black text-brand-navy tracking-tighter">Paweł Dusza</h2>
+            
+            <div className="w-full h-1 bg-brand-blue/80 rounded-full my-4" />
+
+            <div className="text-brand-navy space-y-6 text-sm md:text-base">
+              <p className="leading-relaxed">
+                Hey there — I've been fascinated by technology since I was a kid. Building things that actually work for people has always been my drive.
+              </p>
+              <p className="leading-relaxed">
+                The local market makes it clear: AI receptionists and assistants are becoming essential — not just useful. Honestly? I find it easier to speak to a well-built AI agent than to some humans when I'm trying to book a GP appointment.
+              </p>
+              <p className="leading-relaxed font-bold">
+                That's why I'm here — building workflow improvements, automation, and AI-powered tools for businesses, services, and ambitious people. This is my second career, and I'm putting everything into it.
               </p>
             </div>
-            <div className="pt-8 border-t border-brand-navy/5">
-              <h4 className="font-black text-brand-navy uppercase tracking-widest">Pawel Dusza</h4>
-              <p className="text-xs font-bold text-brand-blue uppercase tracking-widest mt-1">Founder, Cambridge AI Receptionist</p>
-              <div className="mt-6 flex flex-col gap-2 text-xs font-bold text-brand-navy/60 uppercase tracking-widest">
-                <p className="flex items-center gap-2">📍 Based in Huntingdon, serving the Cambridge area.</p>
-                <p className="flex items-center gap-2">📞 +44 07759 085416</p>
+            
+            <div className="pt-6 border-t border-brand-navy/10 flex items-center justify-between">
+              <span className="text-[10px] font-bold text-brand-blue uppercase tracking-widest">
+                Cambridge, UK • AI Assistants & Receptionists • Workflow Automation
+              </span>
+              <div className="font-display font-black tracking-tighter text-brand-navy text-right leading-[0.8]">
+                 <span className="text-sm">CAMBRIDGE<span className="text-brand-blue">AI</span></span>
+                 <br/><span className="text-[7px] uppercase tracking-[0.2em] opacity-50">Receptionist</span>
               </div>
             </div>
           </div>
@@ -977,52 +988,9 @@ export default function App() {
       <Navbar />
       <Hero />
       <ProblemSolution />
-      <LuxuryStats />
       <Features />
-      <ForWho />
       <Process />
-      <Pricing />
       <About />
-      
-      {/* Testimonial Quote */}
-      <section className="py-32 overflow-hidden relative bg-transparent">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-display text-[25vw] font-black text-brand-navy/[0.03] select-none -z-10 tracking-tighter">
-          ELITE
-        </div>
-        <div className="max-w-7xl mx-auto px-10">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            className="editorial-card p-16 md:p-24 rounded-3xl border border-brand-navy/5 max-w-5xl mx-auto text-left shadow-[0_50px_100px_rgba(0,31,63,0.1)] relative overflow-hidden bg-white/70"
-          >
-            <div className="absolute top-0 left-0 w-2 h-full bg-brand-cyan" />
-            <div className="flex justify-start gap-1 mb-12">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Star key={i} className="w-5 h-5 fill-brand-gold text-brand-gold group-hover:scale-125 transition-transform" />
-              ))}
-            </div>
-            <p className="text-3xl md:text-5xl font-display font-black text-brand-navy mb-12 leading-[1.05] tracking-tight">
-              "The professionalism is unparalleled. Our clients have no idea they're speaking to an AI. It's transformed our boutique law firm's engagement entirely."
-            </p>
-            <div className="flex items-center gap-6">
-               <div className="w-16 h-0.5 bg-brand-navy/10" />
-               <div>
-                  <h4 className="font-black text-brand-navy text-xl uppercase tracking-widest">Julian Harrington</h4>
-                  <p className="text-brand-blue text-xs font-bold uppercase tracking-[0.3em] pt-2">Managing Partner, Harrington & Co.</p>
-               </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      <div className="max-w-7xl mx-auto px-10 py-12 text-center">
-         <button className="editorial-btn bg-brand-navy text-white hover:bg-brand-blue border border-brand-navy w-full md:w-auto px-12 py-6 text-sm shadow-[0_20px_40px_rgba(0,31,63,0.15)] radiant-glow-btn">
-            Get Your Custom AI Built Today
-         </button>
-      </div>
-
-      <CTA />
       <Footer />
       <Chatbot />
     </div>

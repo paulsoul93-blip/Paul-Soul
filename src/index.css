@@ -53,13 +53,13 @@
 }
 
 @keyframes radiant-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.1), 0 0 10px rgba(0, 102, 255, 0.05); }
-  50% { box-shadow: 0 0 0 4px rgba(0, 212, 255, 0), 0 0 20px rgba(0, 212, 255, 0.2); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.02), 0 0 5px rgba(0, 102, 255, 0.02); }
+  50% { box-shadow: 0 0 0 2px rgba(0, 212, 255, 0), 0 0 15px rgba(0, 212, 255, 0.08); }
 }
 
 @keyframes static-glow {
-  0%, 100% { box-shadow: 0 0 8px rgba(0, 212, 255, 0.15); }
-  50% { box-shadow: 0 0 16px rgba(0, 212, 255, 0.3); }
+  0%, 100% { box-shadow: 0 0 5px rgba(0, 212, 255, 0.08); }
+  50% { box-shadow: 0 0 12px rgba(0, 212, 255, 0.15); }
 }
 
 .radiant-glow-btn {
@@ -91,15 +91,15 @@
 }
 
 .glass {
-  @apply backdrop-blur-2xl bg-white/60 border border-white/40 shadow-[0_8px_32px_rgba(0,31,63,0.05)];
+  @apply backdrop-blur-2xl bg-white/60 border border-white/80 shadow-[inset_0_1px_1px_rgba(255,255,255,0.8),0_8px_32px_rgba(0,31,63,0.03)];
 }
 
 .glass-dark {
-  @apply backdrop-blur-2xl bg-brand-navy/60 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)];
+  @apply backdrop-blur-2xl bg-brand-navy/60 border border-white/5 shadow-[inset_0_1px_1px_rgba(255,255,255,0.1),0_8px_32px_rgba(0,0,0,0.3)];
 }
 
 .editorial-card {
-  @apply bg-white p-8 rounded-3xl shadow-[0_20px_40px_rgba(0,31,63,0.04)] border border-brand-navy/5 transition-all duration-[600ms] ease-out hover:shadow-[0_40px_80px_rgba(0,212,255,0.1)] hover:-translate-y-2 hover:border-brand-cyan/30;
+  @apply bg-white p-8 rounded-3xl shadow-[inset_0_1px_1px_rgba(255,255,255,1),0_15px_30px_rgba(0,31,63,0.03)] border border-brand-navy/5 transition-all duration-[600ms] ease-out hover:shadow-[0_30px_60px_rgba(0,212,255,0.05)] hover:-translate-y-1 hover:border-brand-cyan/20;
 }
 
 .icon-box {
